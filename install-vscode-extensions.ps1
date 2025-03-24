@@ -1,7 +1,11 @@
-#!/bin/bash
+# Make sure the 'code' CLI is available
+if (-not (Get-Command "code" -ErrorAction SilentlyContinue)) {
+    Write-Host "❌ VS Code 'code' CLI not found. Please ensure it's installed and added to PATH." -ForegroundColor Red
+    exit
+}
 
-# VS Code extension list
-extensions=(
+# List of VS Code extensions
+$extensions = @(
   "aaron-bond.better-comments"
   "bierner.colorize"
   "dbaeumer.vscode-eslint"
@@ -46,9 +50,10 @@ extensions=(
   "ms-vscode-remote.vscode-remote-extensionpack"
 )
 
-for extension in "${extensions[@]}"; do
-  echo "Installing $extension..."
-  code --install-extension "$extension" --force
-done
+# Loop through each extension and install it
+foreach ($extension in $extensions) {
+    Write-Host "Installing $extension..." -ForegroundColor Cyan
+    code --install-extension $extension --force
+}
 
-echo "✅ All extensions installed."
+Write-Host "`n✅ All extensions installed." -ForegroundColor Green
